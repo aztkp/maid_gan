@@ -37,9 +37,9 @@ class Scraper():
         for img in imgs:
             url = img.get("src")
             if url[0:5] == "https":
-                url_full = url
+                url_full = quote(url)
             else:
-                url_full = self.base_url+url
+                url_full = quote(self.base_url+url)
             print("画像URL : "+url_full)
             file_path = self.__download_img(url_full)
 
@@ -61,9 +61,10 @@ class Scraper():
 
     def __download_img(self, url):
         try:
-            with urllib.request.urlopen(quote(url, safe=":/")) as web_file:
+            with urllib.request.urlopen(url) as web_file:
                 data = web_file.read()
-                file_name = url.split("/")[-1]
+                print(type(url.split("/")[-1]))
+                file_name = quote(url.split("/")[-1])
                 file_path = self.dst_path+"/"+file_name
                 with open(file_path, mode='wb') as local_file:
                     local_file.write(data)
